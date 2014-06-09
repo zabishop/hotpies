@@ -843,6 +843,22 @@ fieldset.proofing legend{
 
 }
 
+tr.bad {
+    background: rgba(255, 0, 0, .2);
+}
+
+tr.meh {
+    background: rgba(255, 255, 0, .2);
+}
+
+tr.good {
+
+}
+
+table {
+    margin-bottom: 0;
+}
+
 /* Media Queries for responsivenessssssss
 -------------------------------------------------------------- */
 @media (max-width: 767px) {

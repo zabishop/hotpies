@@ -58,8 +58,7 @@
                 </header>
                 <?php
 
-                $status_array = array('development', 'planning', 'proofing', 'live', 'hold' );
-
+                $status_array = array('development', 'planning', 'proofing', 'hold', 'live');
 
                 foreach ($status_array as $status) {
                     $my_query = new WP_Query(array(
@@ -71,29 +70,69 @@
                         'meta_value' => $status
                     ));
 
-                    $date_format = 'F j, Y';
+
 
                     echo "<fieldset class='{$status}'>";
                     echo "<legend>{$status}</legend>";
 
                     if ($my_query->have_posts()) {
+                        //check status and assign time sensitive status
+                        switch ($status) {
+                            case 'live';
+                                // #weeks * days/week * hours/day * min/hour * seconds/min
+                                $bad = 10000 * 7 * 24 * 60 * 60;
+                                $meh = 10000 * 7 * 24 * 60 * 60;
+                                break;
+                            case 'development';
+                                // #weeks * days/week * hours/day * min/hour * seconds/min
+                                $bad = 2 * 7 * 24 * 60 * 60;
+                                $meh = 1 * 7 * 24 * 60 * 60;
+                                break;
+                            case 'planning';
+                                // #weeks * days/week * hours/day * min/hour * seconds/min
+                                $bad = 2 * 7 * 24 * 60 * 60;
+                                $meh = 1 * 7 * 24 * 60 * 60;
+                                break;
+                            case 'proofing';
+                                // #weeks * days/week * hours/day * min/hour * seconds/min
+                                $bad = 4 * 7 * 24 * 60 * 60;
+                                $meh = 2 * 7 * 24 * 60 * 60;
+                                break;
+                            case 'hold';
+                                // #weeks * days/week * hours/day * min/hour * seconds/min
+                                $bad = 6 * 7 * 24 * 60 * 60;
+                                $meh = 3 * 7 * 24 * 60 * 60;
+                                break;
+                        }
+
                         //Begin table markup
                         echo '<table>';
                         //Begin table header markup
                         echo '<tr>';
-                        echo '<th>Project name/Link</th>';
+                        echo '<th>Project</th>';
                         echo '<th>Developer</th>';
                         echo '<th>Last modified</th>';
                         echo '<tr>';
                         //End Table Header Markup
                         //Begin looping through posts to build table rows
                         while ($my_query->have_posts()) {
-                            echo '<tr>';
+
                             $my_query->the_post();
-                            $last_modified = get_the_modified_date($date_format);
-                            $developer = $cfs->get('developer');
 
+                            $last_modified = get_the_modified_date('m.d.y');
+                            $last_modified_int = strtotime($last_modified);
+                            $current_time = strtotime('now');
+                            $difference = $current_time - $last_modified_int;
 
+                            if ($difference > $bad) {
+                                $class = "bad";
+                            } elseif ($difference > $meh) {
+                                $class = "meh";
+                            } else {
+                                $class = "good";
+                            }
+
+                            echo '<tr class="' . $class . '">';
                             //First column value
                             echo '<td>';
                             echo '<a href="';
@@ -104,16 +143,24 @@
                             echo '</td>';
 
                             //Second column
-
                             echo '<td>';
-                            echo $developer;
+                            $values = $cfs->get('developer');
+                            $i = 0;
+                            foreach ($values as $value => $label) {
+                                $i++;
+                                if ($i != count($values)) {
+                                    $value .= ", ";
+                                }
+                                echo $value;
+                            }
                             echo '</td>';
 
-                            //Last Column Value
+                            //Third Column
                             echo '<td>';
-                            echo  $last_modified;
+                            echo $last_modified;
                             echo '</td>';
-                            echo '</tr>';
+
+
                         }
                         echo '</table>';
                     } else {
@@ -126,8 +173,6 @@
 
                 }
                 ?>
-
-
             </div>
             <!-- #content .site-content -->
         </div>
