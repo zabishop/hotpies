@@ -58,7 +58,7 @@
                 </header>
                 <?php
 
-                $status_array = array('in development', 'completed', 'client proofing', 'planning');
+                $status_array = array('development', 'planning', 'proofing', 'live', 'hold' );
 
 
                 foreach ($status_array as $status) {
@@ -71,26 +71,56 @@
                         'meta_value' => $status
                     ));
 
+                    $date_format = 'F j, Y';
+
+                    echo "<fieldset class='{$status}'>";
+                    echo "<legend>{$status}</legend>";
+
                     if ($my_query->have_posts()) {
+                        //Begin table markup
+                        echo '<table>';
+                        //Begin table header markup
+                        echo '<tr>';
+                        echo '<th>Project name/Link</th>';
+                        echo '<th>Developer</th>';
+                        echo '<th>Last modified</th>';
+                        echo '<tr>';
+                        //End Table Header Markup
+                        //Begin looping through posts to build table rows
                         while ($my_query->have_posts()) {
+                            echo '<tr>';
                             $my_query->the_post();
-                            echo '<li>';
-                            $values = $cfs->get('status');
+                            $last_modified = get_the_modified_date($date_format);
+                            $developer = $cfs->get('developer');
 
 
-                            echo ' :<a href="';
+                            //First column value
+                            echo '<td>';
+                            echo '<a href="';
                             echo the_permalink();
                             echo '">';
                             echo the_title();
-                            echo '<span>';
-                            echo $cfs->get('main_menu_subtitle');
-                            echo '</span></a>';
-                            foreach ($values as $value => $label) {
-                                echo '<p>' . $value . '</p>';
-                            }
-                            echo '</li>';
+                            echo '</a>';
+                            echo '</td>';
+
+                            //Second column
+
+                            echo '<td>';
+                            echo $developer;
+                            echo '</td>';
+
+                            //Last Column Value
+                            echo '<td>';
+                            echo  $last_modified;
+                            echo '</td>';
+                            echo '</tr>';
                         }
+                        echo '</table>';
+                    } else {
+                        echo "<li>No projects found...</li>";
                     }
+
+                    echo "</fieldset>";
 
                     wp_reset_postdata();
 
