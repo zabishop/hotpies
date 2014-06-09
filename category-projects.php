@@ -73,7 +73,7 @@
 
 
                     echo "<fieldset class='{$status}'>";
-                    echo "<legend>{$status}</legend>";
+                    echo "<legend><h2>{$status}</h2></legend>";
 
                     if ($my_query->have_posts()) {
                         //check status and assign time sensitive status
