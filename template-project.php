@@ -9,10 +9,10 @@
 
     <h2>Status</h2>
     <?php
-    $values = $cfs->get('status');
+    $status = $cfs->get('status');
 
-    foreach ($values as $value => $label) {
-        echo "<p>";
+    foreach ($status as $value => $label) {
+        echo "<p class='status {$label}'>";
         echo $value;
         echo "</p>";
     }
@@ -20,58 +20,65 @@
 
     <h2>Developer(s)</h2>
     <?php
-    $values = $cfs->get('developer');
+    $developer = $cfs->get('developer');
     $i = 0;
-    echo "<p>";
-    foreach ($values as $value => $label) {
-
-        $i++;
-        if ($i != count($values)) {
-            $value .= ", ";
-        }
+    echo "<ul>";
+    foreach ($developer as $value => $label) {
+        echo "<li>";
         echo $value;
-
+        echo "</li>";
     }
-    echo "</p>";
+    echo "</ul>";
     ?>
 
-    <h2>Documents</h2>
-    <ul>
-        <?php
-        $fields = $cfs->get('documents');
-        foreach ($fields as $field) {
-            $url = $field['file'];
-            $title = $field['title'];
-            echo "<li><a href='{$url}'>{$title}</a></li>";
-        }
+    <?php
+    $documents = $cfs->get('documents');
+    if ($documents) {
         ?>
-    </ul>
+        <h2>Documents</h2>
+        <ul>
+            <?php
+            foreach ($documents as $field) {
+                $url = $field['file'];
+                $title = $field['title'];
+                echo "<li><a href='{$url}'>{$title}</a></li>";
+            }
+            ?>
+        </ul>
+    <?php } ?>
 
-    <h2>Points of Contact</h2>
-    <ul>
-        <?php
-        $fields = $cfs->get('points_of_contact');
-        foreach ($fields as $field) {
-            $name  = $field['name'];
-            $email = $field['email'];
-            $phone = $field['phone'];
-            echo "<li>$name, $email, $phone</li>";
-        }
+    <?php
+    $points_of_contacts = $cfs->get('points_of_contact');
+    if ($points_of_contacts) {
         ?>
-    </ul>
+        <h2>Points of Contact</h2>
+        <ul>
+            <?php
+            foreach ($points_of_contacts as $contact) {
 
-    <h2>Events</h2>
-    <ul>
-        <?php
-        $fields = $cfs->get('events');
-        foreach ($fields as $field) {
-            $date  = $field['date'];
-            $desc = $field['description'];
+                $name = $contact['name'] ? $contact['name'] : null;
+                $email = $contact['email'] ? '- '. $contact['email'] : null;
+                $phone = $contact['phone'] ? '- '. $contact['phone'] : null;
+                echo "<li>$name $email $phone</li>";
+            } ?>
+        </ul>
+    <?php } ?>
 
-            echo "<li><strong>{$date}:</strong> {$desc}</li>";
-        }
+    <?php
+    $events = $cfs->get('events');
+    if ($events) {
         ?>
-    </ul>
+        <h2>Events</h2>
+        <ul>
+            <?php
+            foreach ($events as $event) {
+                $date = $event['date'];
+                $desc = $event['description'];
+
+                echo "<li><strong>{$date}:</strong> {$desc}</li>";
+            } ?>
+        </ul>
+    <?php } ?>
 
     <?php //wp_link_pages(); ?>
 </div>

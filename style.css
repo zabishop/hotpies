@@ -119,6 +119,7 @@ html {
     /* Prevents iOS text size adjust after orientation change, without disabling user zoom */
     -ms-text-size-adjust: 100%;
     /* www.456bereastreet.com/archive/201012/controlling_text_size_in_safari_for_ios_without_disabling_user_zoom/ */
+
 }
 
 ol,
@@ -363,7 +364,8 @@ h1 {
 h2 {
     line-height: 50.32px;
     font-size: 34px;
-    font-size: 3.4rem;
+    font-size: 3rem;
+    color:#444;
 }
 
 h3 {
@@ -823,26 +825,77 @@ td:last-child{
     text-align: right;
 }
 
-fieldset.development legend {
-
+legend {
+    border:none;
+    font-size:18px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    color:#999;
+    display:inline-block;
+    vertical-align: middle;
 }
 
-fieldset.planning legend{
-
+fieldset.development legend,
+.status.development {
+        color:green;
 }
 
-fieldset.live legend{
-
+fieldset.development legend:before,
+.status.development:before {
+    font-family: "dashicons";
+    content: "\f308";
+    font-size:22px;
+    position: relative;
+    top: 4px;
 }
 
-fieldset.hold legend{
-
+fieldset.planning legend,
+.status.planning {
+    color:navy;
 }
-
-fieldset.proofing legend{
-
+fieldset.planning legend:before,
+.status.planning:before {
+    font-family: "dashicons";
+    content: "\f481";
+    font-size:22px;
+    position: relative;
+    top: 6px;
 }
-
+fieldset.live legend,
+.status.live{
+}
+fieldset.live legend:before,
+.status.live:before {
+    font-family: "dashicons";
+    content: "\f319";
+    font-size:22px;
+    position: relative;
+    top: 6px;
+}
+fieldset.hold legend,
+.status.hold {
+    color:maroon;
+}
+fieldset.hold legend:before,
+.status.hold:before {
+    font-family: "dashicons";
+    content: "\f469";
+    font-size:22px;
+    position: relative;
+    top: 6px;
+}
+fieldset.proofing legend,
+.status.proofing {
+    color:olive;
+}
+fieldset.proofing legend:before,
+.status.proofing:before  {
+    font-family: "dashicons";
+    content: "\f179";
+    font-size:22px;
+    position: relative;
+    top: 6px;
+}
 tr.bad {
     background: rgba(255, 0, 0, .2);
 }
@@ -858,7 +911,21 @@ tr.good {
 table {
     margin-bottom: 0;
 }
+.cat-main-section td:first-child {
+    width:50%;
+}
 
+.site-title {
+    font-size:18px;
+    text-transform: uppercase;
+    margin:0;
+    line-height:1em;
+}
+#hot-pie {
+    position:absolute;
+    top:0;
+    right:23px;
+}
 /* Media Queries for responsivenessssssss
 -------------------------------------------------------------- */
 @media (max-width: 767px) {
